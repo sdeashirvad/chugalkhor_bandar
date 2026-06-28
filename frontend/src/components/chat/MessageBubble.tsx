@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { ChatMessageContent } from '@/components/chat/ChatMessageContent'
 import { BANDAR_CHARACTER_ID } from '@/config/world'
 import { getCharacterAvatar } from '@/lib/avatars'
 import type { ConversationMessage } from '@/types/conversation'
@@ -41,13 +42,16 @@ export function MessageBubble({ message, characterName, characterId, isGrouped =
         ) : null}
         <div
           className={cn(
-            'inline-block px-4 py-2.5 text-[15px] leading-relaxed shadow-sm',
-            isUser && 'rounded-2xl rounded-tr-md bg-jungle-moss text-primary-foreground',
-            isBandar && 'rounded-2xl rounded-tl-md border border-border/50 bg-card/95 text-foreground',
-            !isUser && !isBandar && 'rounded-2xl bg-muted/80',
+            'px-4 py-2.5 text-[15px] leading-relaxed shadow-sm',
+            isUser && 'inline-block rounded-2xl rounded-tr-md bg-jungle-moss text-primary-foreground',
+            isBandar && 'block rounded-2xl rounded-tl-md border border-border/50 bg-card/95 text-foreground',
+            !isUser && !isBandar && 'inline-block rounded-2xl bg-muted/80',
           )}
         >
-          {message.content}
+          <ChatMessageContent
+            content={message.content}
+            variant={isUser ? 'user' : isBandar ? 'bandar' : 'other'}
+          />
         </div>
       </div>
     </motion.div>
