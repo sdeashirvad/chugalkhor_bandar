@@ -7,7 +7,6 @@ import { ChatEmptyState } from '@/components/chat/ChatEmptyState'
 import { ChatHeader } from '@/components/chat/ChatHeader'
 import { MessageBubble } from '@/components/chat/MessageBubble'
 import { TypingIndicator } from '@/components/chat/TypingIndicator'
-import { Skeleton } from '@/components/ui/skeleton'
 import {
   useConversation,
   useConversationMessages,
