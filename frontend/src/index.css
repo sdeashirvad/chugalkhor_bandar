@@ -94,6 +94,116 @@ html {
   -webkit-overflow-scrolling: touch;
 }
 
+.chat-bubble-bandar {
+  border-radius: 1.25rem;
+  border-top-left-radius: 0.45rem;
+  background: linear-gradient(180deg, rgba(255, 252, 247, 0.98), rgba(250, 244, 232, 0.96));
+  box-shadow:
+    0 1px 2px rgba(44, 36, 25, 0.04),
+    0 8px 24px rgba(44, 36, 25, 0.06);
+  padding: 1.125rem 1.25rem;
+}
+
+.chat-bubble-user {
+  border-radius: 1.25rem;
+  border-top-right-radius: 0.45rem;
+  background: linear-gradient(180deg, #3f7154, var(--color-jungle-moss));
+  color: var(--color-primary-foreground);
+  box-shadow: 0 6px 18px rgba(61, 107, 79, 0.18);
+  padding: 0.875rem 1.125rem;
+}
+
+.chat-bubble-other {
+  border-radius: 1.25rem;
+  background: var(--color-muted);
+  padding: 0.875rem 1.125rem;
+}
+
+.chat-markdown,
+.chat-markdown-bandar {
+  font-size: 1rem;
+  line-height: 1.7;
+  letter-spacing: 0.01em;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  hyphens: auto;
+}
+
+@media (min-width: 640px) {
+  .chat-markdown,
+  .chat-markdown-bandar {
+    font-size: 1.0625rem;
+    line-height: 1.72;
+  }
+}
+
+.chat-paragraph {
+  margin: 0 0 1.125rem;
+}
+
+.chat-paragraph:last-child,
+.chat-narration-block:last-child,
+.chat-list:last-child {
+  margin-bottom: 0;
+}
+
+.chat-user-text {
+  display: inline-block;
+  font-size: 1rem;
+  line-height: 1.65;
+  white-space: pre-wrap;
+}
+
+.chat-narration,
+.chat-narration-block {
+  display: block;
+  font-style: italic;
+  color: var(--color-muted-foreground);
+}
+
+.chat-narration {
+  display: inline;
+  margin: 0 0.12em;
+}
+
+.chat-narration-block {
+  margin: 0.75rem 0 1rem;
+  font-size: 0.95em;
+  line-height: 1.6;
+}
+
+.chat-list {
+  margin: 0 0 1.125rem;
+  padding-left: 1.25rem;
+}
+
+.chat-list-disc {
+  list-style-type: disc;
+}
+
+.chat-list-decimal {
+  list-style-type: decimal;
+}
+
+.chat-list-item {
+  margin-bottom: 0.625rem;
+  line-height: 1.68;
+}
+
+.chat-list-item:last-child {
+  margin-bottom: 0;
+}
+
+.chat-link {
+  color: var(--color-jungle-canopy);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.chat-composer {
+  box-shadow: 0 -4px 24px rgba(44, 36, 25, 0.04);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

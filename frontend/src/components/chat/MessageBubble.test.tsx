@@ -15,24 +15,28 @@ const bandarMessage: ConversationMessage = {
 describe('MessageBubble', () => {
   it('renders Bandar markdown with bold text and lists', () => {
     render(
-      <MessageBubble message={bandarMessage} characterName="Alpha" characterId="char1" />,
+      <MessageBubble message={bandarMessage} characterName="Alpha" characterId="char1" characterTitle="Prince" />,
     )
 
+    expect(screen.getByText('Storyteller')).toBeInTheDocument()
     expect(screen.getByText('friend').tagName).toBe('STRONG')
     expect(screen.getByText('Little Brother:')).toBeInTheDocument()
     expect(screen.getByText('A brave soul.')).toBeInTheDocument()
     expect(screen.getAllByRole('listitem')).toHaveLength(2)
   })
 
-  it('renders user messages as plain text', () => {
+  it('renders user messages as plain text with character title', () => {
     render(
       <MessageBubble
         message={{ ...bandarMessage, sender: 'USER', content: 'Hi **Bandar**' }}
-        characterName="Alpha"
+        characterName="Second Hippu"
         characterId="char1"
+        characterTitle="Adventurer"
       />,
     )
 
+    expect(screen.getByText('Second Hippu')).toBeInTheDocument()
+    expect(screen.getByText('Adventurer')).toBeInTheDocument()
     expect(screen.getByText('Hi **Bandar**')).toBeInTheDocument()
   })
 })

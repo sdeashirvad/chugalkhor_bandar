@@ -13,6 +13,8 @@ import {
   useSendMessage,
   useStartConversation,
 } from '@/hooks/useConversation'
+import { useChatAutoScroll } from '@/hooks/useChatAutoScroll'
+import { useStagedMessages } from '@/hooks/useStagedMessages'
 import { useSession } from '@/hooks/useSession'
 import { useWorkingMemory } from '@/hooks/useWorkingMemory'
 import { useUnreadNotificationCount } from '@/hooks/useNotifications'
@@ -50,33 +52,18 @@ export function ChatPage() {
   }, [conversation, initialized, startConversation])
 
   const messages = messagesQuery.data?.messages ?? []
+  const visibleMessages = useStagedMessages(messages, sendMessage.isPending)
   const messagesSignature = useMemo(
-    () => messages.map((message) => `${message.messageId}:${message.content.length}`).join('|'),
-    [messages],
+    () => visibleMessages.map((message) => `${message.messageId}:${message.content.length}`).join('|'),
+    [visibleMessages],
   )
+  const lastSender = visibleMessages[visibleMessages.length - 1]?.sender
 
-  useEffect(() => {
-    const thread = threadRef.current
-    if (!thread) return
-
-    const lastMessage = messages[messages.length - 1]
-    const shouldAnimate = lastMessage?.sender === 'BANDAR' || sendMessage.isPending
-
-    const scrollToBottom = (behavior: ScrollBehavior) => {
-      if (typeof thread.scrollTo === 'function') {
-        thread.scrollTo({ top: thread.scrollHeight, behavior })
-      } else {
-        thread.scrollTop = thread.scrollHeight
-      }
-    }
-
-    scrollToBottom(shouldAnimate ? 'smooth' : 'instant')
-
-    if (!shouldAnimate) return
-
-    const afterLayout = window.setTimeout(() => scrollToBottom('smooth'), 280)
-    return () => window.clearTimeout(afterLayout)
-  }, [messagesSignature, messages.length, sendMessage.isPending])
+  useChatAutoScroll(threadRef, {
+    signature: messagesSignature,
+    isPending: sendMessage.isPending,
+    lastSender,
+  })
 
   const isBootstrapping =
     conversation.isLoading || startConversation.isPending || (conversation.isError && startConversation.isPending)
@@ -108,6 +95,7 @@ export function ChatPage() {
 
   const characterId = session?.currentCharacter.id ?? ''
   const characterName = session?.currentCharacter.displayName ?? 'You'
+  const characterTitle = session?.currentCharacter.titles[0] ?? null
 
   const pendingHints: string[] = []
   if ((unread.data?.unreadCount ?? 0) > 0) pendingHints.push('Letters waiting')
@@ -128,35 +116,38 @@ export function ChatPage() {
 
       <div
         ref={threadRef}
-        className="chat-thread flex min-h-0 flex-1 flex-col overflow-y-auto px-3 py-3 sm:px-4 lg:py-4"
+        className="chat-thread flex min-h-0 flex-1 flex-col overflow-y-auto px-4 py-4 sm:px-5 sm:py-5 lg:px-8 lg:py-6"
         aria-live="polite"
       >
-        <div className="mx-auto w-full max-w-3xl flex-1">
+        <div className="mx-auto w-full max-w-2xl flex-1 pb-4">
           {invitation ? (
-            <aside className="mb-6 rounded-xl border border-jungle-gold/20 bg-jungle-gold/5 px-4 py-3 text-sm leading-relaxed text-jungle-bark">
+            <aside className="mb-8 rounded-2xl border border-jungle-gold/20 bg-jungle-gold/5 px-5 py-4 text-base leading-[1.7] text-jungle-bark">
               <p className="font-display font-medium text-foreground">Bandar reached out</p>
-              <p className="mt-2 whitespace-pre-wrap text-muted-foreground">{invitation}</p>
+              <p className="mt-3 whitespace-pre-wrap text-muted-foreground">{invitation}</p>
             </aside>
           ) : null}
 
           {isLoadingMessages ? (
-            <div className="flex justify-center py-12">
+            <div className="flex justify-center py-16">
               <LoadingSpinner label="Gathering the conversation…" />
             </div>
           ) : null}
 
           {!isLoadingMessages && messages.length === 0 ? <ChatEmptyState /> : null}
 
-          {messages.map((message, index) => {
-            const previous = messages[index - 1]
+          {visibleMessages.map((message, index) => {
+            const previous = visibleMessages[index - 1]
             const isGrouped = previous?.sender === message.sender
+            const isSpeakerChange = Boolean(previous && previous.sender !== message.sender)
             return (
               <MessageBubble
                 key={message.messageId}
                 message={message}
                 characterName={characterName}
                 characterId={characterId}
+                characterTitle={characterTitle}
                 isGrouped={isGrouped}
+                isSpeakerChange={isSpeakerChange}
               />
             )
           })}
