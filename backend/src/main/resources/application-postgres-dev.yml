@@ -1,0 +1,26 @@
+spring:
+
+  datasource:
+
+    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT:5432}/${POSTGRES_DB}?sslmode=${POSTGRES_SSLMODE:require}
+
+    username: ${POSTGRES_USER:}
+
+    password: ${POSTGRES_PASSWORD:}
+
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+
+    hibernate:
+
+      ddl-auto: validate
+
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  flyway:
+
+    enabled: true
+
+    locations: classpath:db/migration
+

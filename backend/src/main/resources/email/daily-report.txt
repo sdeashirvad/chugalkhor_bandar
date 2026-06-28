@@ -1,0 +1,25 @@
+Jungle Daily Report
+===================
+
+{{greeting}}
+
+{{reflectionSection}}
+
+Statistics
+----------
+Conversations:      {{conversations}}
+Artifacts:          {{artifacts}}
+Inbox Items:        {{inboxItems}}
+Promoted:           {{promoted}}
+Discarded:          {{discarded}}
+Candidates:         {{candidates}}
+Pending Promises:   {{pendingPromises}}
+Notifications:      {{unreadNotifications}}
+
+Attachments
+-----------
+{{attachmentsList}}
+
+{{closing}}
+
+— Bandar

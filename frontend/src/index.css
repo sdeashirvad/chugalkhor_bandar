@@ -1,0 +1,96 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-background: #f6f0e4;
+  --color-foreground: #2c2419;
+  --color-muted: #ebe3d4;
+  --color-muted-foreground: #6b5d4d;
+  --color-border: #d4c9b8;
+  --color-primary: #3d6b4f;
+  --color-primary-foreground: #f6f0e4;
+  --color-card: #fffcf7;
+  --color-accent: #ebe3d4;
+  --color-jungle-deep: #1a2e1a;
+  --color-jungle-canopy: #2d4a35;
+  --color-jungle-gold: #c9a227;
+  --color-jungle-bark: #5c4033;
+  --color-jungle-parchment: #f6f0e4;
+  --color-jungle-moss: #3d6b4f;
+  --color-jungle-warm: #d4a574;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Source Sans 3', system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-body);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.jungle-shell-bg {
+  background:
+    radial-gradient(ellipse at top left, rgba(61, 107, 79, 0.08), transparent 50%),
+    radial-gradient(ellipse at bottom right, rgba(201, 162, 39, 0.06), transparent 50%),
+    var(--color-background);
+}
+
+.world-card {
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-border);
+  background: var(--color-card);
+  box-shadow:
+    0 1px 2px rgba(44, 36, 25, 0.04),
+    0 4px 16px rgba(44, 36, 25, 0.06);
+}
+
+.paper-texture {
+  background-image: url('/assets/paper-texture.svg');
+  background-repeat: repeat;
+  background-size: 200px 200px;
+}
+
+.login-portal-bg {
+  background-image:
+    linear-gradient(to bottom, rgba(26, 46, 26, 0.55), rgba(26, 46, 26, 0.85)),
+    url('/assets/login-portal.webp');
+  background-size: cover;
+  background-position: center;
+}
+
+.mobile-bottom-nav {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.chat-surface {
+  background:
+    radial-gradient(ellipse 120% 80% at 50% -20%, rgba(61, 107, 79, 0.07), transparent 55%),
+    radial-gradient(ellipse 80% 50% at 100% 100%, rgba(201, 162, 39, 0.05), transparent 50%),
+    var(--color-card);
+}
+
+.chat-thread {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,131 @@
+spring:
+  application:
+    name: Chugalkhor Bandar
+  profiles:
+    active: dev
+
+chugalkhor:
+  name: Chugalkhor Bandar
+  bootstrap-folder: ../bootstrap
+  chronicle-folder: ../chronicles
+  working-memory:
+    conversation-window-messages: 10
+    analysis-window-messages: 20
+  conversation-director:
+    max-messages: 3
+    dev-delay-multiplier: 1.0
+    conversation-energy-thresholds:
+      medium-second-message-modulo: 3
+      high-third-message-modulo: 4
+    message-delay-range:
+      second-message-min-ms: 4000
+      second-message-max-ms: 6000
+      third-message-min-ms: 4000
+      third-message-max-ms: 7000
+  notifications:
+    daily-greeting-probability: 0.8
+    notification-expiration-days: 7
+    maximum-active-notifications: 10
+    developer-force-generation: false
+    recent-visit-threshold-days: 3
+  artifacts:
+    artifact-expiration-days: 30
+    maximum-active-artifacts: 20
+  cognitive-analysis:
+    enabled: true
+    provider: mock
+    temperature: 0.1
+    timeout-seconds: 60
+    minimum-confidence: 0.5
+    run-asynchronously: true
+    mock-enabled: true
+  memory-inbox:
+    enabled: true
+    minimum-confidence: 0.5
+    default-expiration-days: 30
+    deduplication-enabled: true
+    maximum-items: 100
+  memory-consolidation:
+    enabled: true
+    schedule: "0 0 0 * * *"
+    reflection-enabled: false
+    email-enabled: false
+    developer-manual-run: true
+    promotion-thresholds:
+      preference-repeat-count: 2
+      story-seed-repeat-count: 2
+      minimum-confidence: 0.5
+  reporting:
+    enabled: true
+    archive-enabled: true
+    retry-enabled: true
+    preview-enabled: true
+    max-retries: 3
+    retry-poll-ms: 60000
+    subject-template: "🐒 Bandar's Morning Letter — {date}"
+    closing-strategy: deterministic
+    closings:
+      - Every creature has a story.
+      - Until tomorrow.
+      - Sleep well. Tomorrow the Jungle wakes again.
+      - There are always more stories.
+    branding:
+      greeting-name: Ashirvad
+    attachments:
+      txt: ${MEMORY_REPORT_ATTACH_TXT:true}
+      json: ${MEMORY_REPORT_ATTACH_JSON:true}
+      md: ${MEMORY_REPORT_ATTACH_MD:true}
+      html: ${MEMORY_REPORT_ATTACH_HTML:false}
+  chronicles:
+    enabled: true
+    writer-enabled: true
+    default-visibility: PRIVATE
+    default-confidence: LIKELY
+    allow-template-customization: false
+    developer-write-enabled: true
+    future-versioning-enabled: true
+  living-world:
+    enabled: true
+    hourly-enabled: true
+    daily-enabled: true
+    festival-enabled: true
+    birthday-enabled: true
+    promise-engine-enabled: true
+    character-initiative-enabled: true
+    gossip-enabled: true
+    manual-tick-enabled: true
+    schedule: "0 0 * * * *"
+
+memory-report:
+  enabled: ${MEMORY_REPORT_ENABLED:false}
+  api-key: ${RESEND_API_KEY:}
+  from: ${RESEND_FROM:}
+  to: ${MEMORY_REPORT_TO:}
+  subject-template: ${MEMORY_REPORT_SUBJECT:}
+
+llm:
+  provider: ${LLM_PROVIDER:mock}
+  model: ${GROQ_MODEL:mock-bandar}
+  temperature: ${LLM_TEMPERATURE:0.7}
+  max-output-tokens: ${LLM_MAX_OUTPUT_TOKENS:1024}
+  timeout-seconds: ${LLM_TIMEOUT_SECONDS:60}
+
+groq:
+  base-url: ${GROQ_BASE_URL:https://api.groq.com/openai/v1}
+  api-key-1: ${GROQ_API_KEY_1:}
+  api-key-2: ${GROQ_API_KEY_2:}
+
+prompt:
+  budget:
+    minimum-section-tokens: 16
+  profiles:
+    location-query:
+      current_location: 55
+      current_character: 45
+    story-query:
+      relevant_stories: 95
+      current_location: 200
+
+logging:
+  level:
+    root: INFO

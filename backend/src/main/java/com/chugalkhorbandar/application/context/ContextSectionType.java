@@ -1,0 +1,19 @@
+package com.chugalkhorbandar.application.context;
+
+public enum ContextSectionType {
+    PERSONALITY,
+    WORLD_CANON,
+    WORLD_STATE,
+    CURRENT_CHARACTER,
+    CURRENT_LOCATION,
+    RELATIONSHIPS,
+    CURRENT_CONVERSATION,
+    WORKING_MEMORY,
+    SESSION_SUMMARY,
+    PUBLIC_EVENTS,
+    LONG_TERM_MEMORY,
+    SECRET_MEMORY,
+    RELEVANT_STORIES,
+    PROMPT_RULES,
+    UNKNOWN
+}
