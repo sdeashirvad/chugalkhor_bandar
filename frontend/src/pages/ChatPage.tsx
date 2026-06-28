@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { ErrorState } from '@/components/ErrorState'
 import { LoadingSpinner } from '@/components/LoadingSpinner'
@@ -21,7 +21,7 @@ import { useArtifacts } from '@/hooks/useArtifacts'
 export function ChatPage() {
   const location = useLocation()
   const invitation = (location.state as { notificationInvitation?: string } | null)?.notificationInvitation
-  const bottomRef = useRef<HTMLDivElement>(null)
+  const threadRef = useRef<HTMLDivElement>(null)
   const [draft, setDraft] = useState('')
   const [initialized, setInitialized] = useState(false)
   const { data: session } = useSession()
@@ -49,9 +49,34 @@ export function ChatPage() {
     }
   }, [conversation, initialized, startConversation])
 
+  const messages = messagesQuery.data?.messages ?? []
+  const messagesSignature = useMemo(
+    () => messages.map((message) => `${message.messageId}:${message.content.length}`).join('|'),
+    [messages],
+  )
+
   useEffect(() => {
-    bottomRef.current?.scrollIntoView?.({ behavior: 'smooth' })
-  }, [messagesQuery.data?.messages.length, sendMessage.isPending])
+    const thread = threadRef.current
+    if (!thread) return
+
+    const lastMessage = messages[messages.length - 1]
+    const shouldAnimate = lastMessage?.sender === 'BANDAR' || sendMessage.isPending
+
+    const scrollToBottom = (behavior: ScrollBehavior) => {
+      if (typeof thread.scrollTo === 'function') {
+        thread.scrollTo({ top: thread.scrollHeight, behavior })
+      } else {
+        thread.scrollTop = thread.scrollHeight
+      }
+    }
+
+    scrollToBottom(shouldAnimate ? 'smooth' : 'instant')
+
+    if (!shouldAnimate) return
+
+    const afterLayout = window.setTimeout(() => scrollToBottom('smooth'), 280)
+    return () => window.clearTimeout(afterLayout)
+  }, [messagesSignature, messages.length, sendMessage.isPending])
 
   const isBootstrapping =
     conversation.isLoading || startConversation.isPending || (conversation.isError && startConversation.isPending)
@@ -59,7 +84,7 @@ export function ChatPage() {
 
   if (isBootstrapping) {
     return (
-      <div className="flex h-[calc(100dvh-3.5rem-4.5rem-env(safe-area-inset-bottom))] items-center justify-center lg:h-[calc(100dvh-3.5rem-1.5rem)]">
+      <div className="flex h-[100dvh] items-center justify-center lg:h-[calc(100dvh-3.5rem-1.5rem)]">
         <LoadingSpinner label="Bandar is preparing to speak…" />
       </div>
     )
@@ -81,7 +106,6 @@ export function ChatPage() {
     sendMessage.mutate({ content })
   }
 
-  const messages = messagesQuery.data?.messages ?? []
   const characterId = session?.currentCharacter.id ?? ''
   const characterName = session?.currentCharacter.displayName ?? 'You'
 
@@ -92,7 +116,7 @@ export function ChatPage() {
   }
 
   return (
-    <div className="chat-surface flex h-[calc(100dvh-3.5rem-4.5rem-env(safe-area-inset-bottom))] flex-col lg:mx-auto lg:h-[calc(100dvh-3.5rem-2rem)] lg:max-w-4xl lg:overflow-hidden lg:rounded-2xl lg:border lg:border-border/50 lg:shadow-md">
+    <div className="chat-surface flex h-[100dvh] flex-col lg:mx-auto lg:h-[calc(100dvh-3.5rem-2rem)] lg:max-w-4xl lg:overflow-hidden lg:rounded-2xl lg:border lg:border-border/50 lg:shadow-md">
       {session ? (
         <ChatHeader
           characterName={characterName}
@@ -102,7 +126,11 @@ export function ChatPage() {
         />
       ) : null}
 
-      <div className="chat-thread flex min-h-0 flex-1 flex-col overflow-y-auto px-3 py-4 sm:px-4" aria-live="polite">
+      <div
+        ref={threadRef}
+        className="chat-thread flex min-h-0 flex-1 flex-col overflow-y-auto px-3 py-3 sm:px-4 lg:py-4"
+        aria-live="polite"
+      >
         <div className="mx-auto w-full max-w-3xl flex-1">
           {invitation ? (
             <aside className="mb-6 rounded-xl border border-jungle-gold/20 bg-jungle-gold/5 px-4 py-3 text-sm leading-relaxed text-jungle-bark">
@@ -134,7 +162,6 @@ export function ChatPage() {
           })}
 
           {sendMessage.isPending ? <TypingIndicator /> : null}
-          <div ref={bottomRef} className="h-1" />
         </div>
       </div>
 

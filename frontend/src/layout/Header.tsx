@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Bell, LogOut, Search, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ConfirmDialog } from '@/components/ConfirmDialog'
@@ -7,10 +7,13 @@ import { Button } from '@/components/ui/button'
 import { getCharacterAvatar } from '@/lib/avatars'
 import { useLogout, useSession } from '@/hooks/useSession'
 import { useUnreadNotificationCount } from '@/hooks/useNotifications'
+import { cn } from '@/lib/utils'
 import { useState } from 'react'
 
 export function Header() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const isMobileChat = location.pathname === '/chat'
   const { data: session } = useSession()
   const unread = useUnreadNotificationCount()
   const logout = useLogout()
@@ -28,7 +31,12 @@ export function Header() {
 
   return (
     <>
-      <header className="flex h-14 shrink-0 items-center gap-2 border-b border-border/80 bg-card/90 px-3 backdrop-blur-sm sm:gap-4 sm:px-4 lg:px-6">
+      <header
+        className={cn(
+          'flex h-14 shrink-0 items-center gap-2 border-b border-border/80 bg-card/90 px-3 backdrop-blur-sm sm:gap-4 sm:px-4 lg:px-6',
+          isMobileChat && 'hidden lg:flex',
+        )}
+      >
         <Link to="/home" className="flex shrink-0 items-center gap-2">
           <img src="/assets/icons/jungle-leaf.svg" alt="" className="h-6 w-6" />
           <div className="hidden min-[380px]:block">

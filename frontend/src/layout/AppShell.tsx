@@ -27,7 +27,7 @@ export function AppShell() {
           className={cn(
             'flex-1 overflow-x-hidden lg:p-6 lg:pb-6',
             isChat
-              ? 'p-0 pb-[calc(4.5rem+env(safe-area-inset-bottom))]'
+              ? 'p-0 pb-0'
               : 'p-3 pb-[calc(4.5rem+env(safe-area-inset-bottom))]',
           )}
         >

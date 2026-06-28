@@ -35,7 +35,12 @@ export function MobileBottomNav() {
           onClick={() => setExploreOpen(false)}
         />
       ) : null}
-      <nav className="mobile-bottom-nav fixed inset-x-0 bottom-0 z-50 border-t border-border/80 bg-card/95 backdrop-blur-sm lg:hidden">
+      <nav
+        className={cn(
+          'mobile-bottom-nav fixed inset-x-0 bottom-0 z-50 border-t border-border/80 bg-card/95 backdrop-blur-sm lg:hidden',
+          location.pathname === '/chat' && 'hidden',
+        )}
+      >
         {exploreOpen ? (
           <div className="border-b border-border/60 px-2 py-2">
             <p className="px-2 pb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Explore</p>
